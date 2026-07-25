@@ -17,3 +17,5 @@ Currently 0 known issues in this version of NEO-Radar, so there is nothing to tr
 Please leave feedback if you experience any faults or difficulties in the program, including your own troubleshooting if you did so, and how the issue was fixed so I can include that into the troubleshooting section here! If you don't know how to troubleshoot the issue, simply just leave feedback on what the problem is and what you did to get the error, and i will get on to fixing that as soon as i can!
 
 Thanks for checking out NEO-Radar!
+
+Also get NEO-Radar for Linux and Termux! https://github.com/ItsNEOx/Neo-Radar/blob/main/README.md
