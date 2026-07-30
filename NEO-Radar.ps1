@@ -15,8 +15,8 @@ function Start-NeoRadar {
 
     $DefaultPrefix = "192.168.0"
     $CurrentVersion = "1.12"
-    $RepoRawUrl = "https://raw.githubusercontent.com/ItsNEOx/Neo-Radar/main/neoradar.ps1"
-    $RepoWebUrl = "https://github.com/ItsNEOx/Neo-Radar"
+    $RepoRawUrl = "https://raw.githubusercontent.com/ItsNEOx/NEO-Radar-Powershell-7/main/neoradar.ps1"
+    $RepoWebUrl = "https://github.com/ItsNEOx/NEO-Radar-Powershell-7"
 
     # --- Non-Windows detection (this script is Windows-only) ---
     if ($PSVersionTable.PSEdition -eq "Core" -and ($IsLinux -or $IsMacOS)) {
