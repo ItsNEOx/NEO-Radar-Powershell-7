@@ -1,4 +1,4 @@
-░▒▓█ NEO RADAR v1.11 █▓▒░
+░▒▓█ NEO RADAR v1.12 █▓▒░
 The super simple, lightweight network scanner for Linux.
 
 Use NEO-Radar by simply downloading thsi ps1 file, then open the file locatio in Powershell 7 (only works in PS 7+)
