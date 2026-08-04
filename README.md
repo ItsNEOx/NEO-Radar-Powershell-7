@@ -1,5 +1,5 @@
 # ░▒▓█ NEO RADAR v1.14 █▓▒░
- ## The super simple, lightweight network scanner for Linux.
+ ## The super simple, lightweight network scanner for Windows.
 
  <img src="https://raw.githubusercontent.com/ItsNEOx/neoimagerepo/refs/heads/main/NEOIMAGE.png" alt="image">
 
