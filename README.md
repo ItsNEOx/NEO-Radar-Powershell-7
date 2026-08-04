@@ -1,7 +1,9 @@
-# ░▒▓█ NEO RADAR v1.13 █▓▒░
+# ░▒▓█ NEO RADAR v1.14 █▓▒░
  ## The super simple, lightweight network scanner for Linux.
 
-Use NEO-Radar by simply downloading thsi ps1 file, then open the file location in Powershell 7 (only works in PS 7+)
+ <img src="https://raw.githubusercontent.com/ItsNEOx/neoimagerepo/refs/heads/main/NEOIMAGE.png" alt="image">
+
+Use NEO-Radar by simply downloading this ps1 file, then open the file location in Powershell 7 (only works in PS 7+)
 example : PS C:\Users\user1\userfolder\downloadedfolder\NEO-Radar> .\NEO-Radar.ps1
 
 the most of it is being located in the right folder so it knows where to read from, or else it has nothing to read and run! once in the right folder in Powershell 7 Terminal, just open the file by running  .\NEO-Radar.ps1
