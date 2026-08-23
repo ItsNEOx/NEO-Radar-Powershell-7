@@ -136,6 +136,7 @@ function Start-NeoRadar {
                     if ($choice -eq 'y' -or $choice -eq 'Y') {
                         Write-Host "`n[+] Redirecting to $RepoWebUrl ..." -ForegroundColor Cyan
                         Start-Process $RepoWebUrl
+                        Write-Host "`n[!] Update ready! Replace this script with the new version, then restart NEO RADAR to run it." -ForegroundColor Yellow
                     }
                 } else {
                     Write-Host "`n[+] You are running the latest version!" -ForegroundColor Green
