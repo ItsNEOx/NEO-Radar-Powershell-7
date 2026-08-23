@@ -1,11 +1,11 @@
-# ░▒▓█ NEO RADAR v1.14 █▓▒░
+# ░▒▓█ NEO RADAR v1.15 █▓▒░
 
 function Start-NeoRadar {
 
     Clear-Host
     Write-Host ""
     Write-Host "============================================" -ForegroundColor DarkMagenta
-    Write-Host "        ░▒▓█ NEO RADAR v1.14 █▓▒░          " -ForegroundColor Cyan
+    Write-Host "        ░▒▓█ NEO RADAR v1.15 █▓▒░          " -ForegroundColor Cyan
     Write-Host "============================================" -ForegroundColor DarkMagenta
     Write-Host "             Created By ItsNEOx             " -ForegroundColor Magenta
     Write-Host "      The super simple network radar      " -ForegroundColor DarkCyan
@@ -14,21 +14,9 @@ function Start-NeoRadar {
     Write-Host ""
 
     $DefaultPrefix = "192.168.0"
-    $CurrentVersion = "1.14"
+    $CurrentVersion = "1.15"
     $RepoRawUrl = "https://raw.githubusercontent.com/ItsNEOx/NEO-Radar-Powershell-7/main/neoradar.ps1"
     $RepoWebUrl = "https://github.com/ItsNEOx/NEO-Radar-Powershell-7"
-
-    # --- Non-Windows detection (this script is Windows-only) ---
-    if ($PSVersionTable.PSEdition -eq "Core" -and ($IsLinux -or $IsMacOS)) {
-        Write-Host "--------------------------------------------" -ForegroundColor DarkMagenta
-        Write-Host " [!] NOT A WINDOWS SYSTEM" -ForegroundColor Yellow
-        Write-Host "--------------------------------------------" -ForegroundColor DarkMagenta
-        Write-Host " This is a Windows PowerShell script." -ForegroundColor Gray
-        Write-Host " It will NOT work on Linux, macOS, or Termux." -ForegroundColor Yellow
-        Write-Host " Use the bash version (neoradar) instead." -ForegroundColor Gray
-        Write-Host "--------------------------------------------" -ForegroundColor DarkMagenta
-        Write-Host ""
-    }
 
     Write-Host "Choose scan mode:" -ForegroundColor Cyan
     Write-Host "1) Network Ping Scan"
@@ -36,9 +24,10 @@ function Start-NeoRadar {
     Write-Host "3) Ping + TCP port scan"
     Write-Host "4) ARP Device MAC Lookup & Vendor Identification"
     Write-Host "5) Hostname Scan & Fingerprinting"
-    Write-Host "6) Help / Feature Guide"
-    Write-Host "7) Check for Updates"
-    Write-Host "8) Nmap Command Reference"
+    Write-Host "6) Custom Port Scan"
+    Write-Host "7) Help / Feature Guide"
+    Write-Host "8) Check for Updates"
+    Write-Host "9) Nmap Command Reference"
     Write-Host "E) Exit Program"
     Write-Host ""
 
@@ -52,9 +41,9 @@ function Start-NeoRadar {
 
         if ([string]::IsNullOrWhiteSpace($Mode)) { $Mode = "1"; break }
 
-        $valid = $Mode -match '^[1-8]$'
+        $valid = $Mode -match '^[1-9]$'
         if (-not $valid) {
-            Write-Host "  [!] Please enter a number between 1 and 8, or 'E' to exit." -ForegroundColor Yellow
+            Write-Host "  [!] Please enter a number between 1 and 9, or 'E' to exit." -ForegroundColor Yellow
         }
     } while (-not $valid)
 
@@ -63,9 +52,9 @@ function Start-NeoRadar {
     Write-Host ""
 
     # -------------------------------------------------------------
-    # Mode 6 — Help / Feature Guide
+    # Mode 7 — Help / Feature Guide
     # -------------------------------------------------------------
-    if ($Mode -eq 6) {
+    if ($Mode -eq 7) {
         Write-Host "============================================" -ForegroundColor DarkMagenta
         Write-Host "         NEO RADAR - HELP & GUIDE           " -ForegroundColor Cyan
         Write-Host "============================================" -ForegroundColor DarkMagenta
@@ -101,20 +90,23 @@ function Start-NeoRadar {
         Write-Host "   high (≥80% signal agreement) / high / medium / low (<40%)." -ForegroundColor Gray
         Write-Host ""
 
-        Write-Host "7) Check for Updates" -ForegroundColor Yellow
+        Write-Host "6) Custom Port Scan" -ForegroundColor Yellow
+        Write-Host "   Scans every discovered host against a port list you provide," -ForegroundColor Gray
+        Write-Host "   e.g. '22, 80, 8080'. Reports which hosts have each port open." -ForegroundColor Gray
+        Write-Host ""
+
+        Write-Host "8) Check for Updates" -ForegroundColor Yellow
         Write-Host "   Checks GitHub for new releases and redirects to the web page to download." -ForegroundColor Gray
         Write-Host ""
 
-        Write-Host "8) Nmap Command Reference" -ForegroundColor Yellow
+        Write-Host "9) Nmap Command Reference" -ForegroundColor Yellow
         Write-Host "   Shows the equivalent Nmap commands for each Neo-Radar scan mode," -ForegroundColor Gray
         Write-Host "   with explanations of flags and how each technique works." -ForegroundColor Gray
         Write-Host ""
 
         Write-Host "Android/Termux Note:" -ForegroundColor Red
-        Write-Host "   This is a Windows PowerShell script and will NOT" -ForegroundColor Gray
-        Write-Host "   run on Termux or Android terminals." -ForegroundColor Yellow
-        Write-Host "   A bash version is included (neoradar) that works" -ForegroundColor Gray
-        Write-Host "   on Linux desktop and Termux." -ForegroundColor Gray
+        Write-Host "   On Termux or Android terminals, Mode 4 (ARP MAC Lookup) will" -ForegroundColor Yellow
+        Write-Host "   not return results, because Android restricts ARP table access." -ForegroundColor Gray
         Write-Host ""
 
         Write-Host "General Tip: Enter 'B' or press Enter at prompts to return to the main menu, 'S' to save scan results, or 'E' to exit." -ForegroundColor DarkGray
@@ -124,9 +116,9 @@ function Start-NeoRadar {
     }
 
     # -------------------------------------------------------------
-    # Mode 7 — Check for Updates
+    # Mode 8 — Check for Updates
     # -------------------------------------------------------------
-    if ($Mode -eq 7) {
+    if ($Mode -eq 8) {
         Write-Host "[+] Checking GitHub for updates..." -ForegroundColor Cyan
 
         try {
@@ -162,9 +154,9 @@ function Start-NeoRadar {
     }
 
     # -------------------------------------------------------------
-    # Mode 8 — Nmap Command Reference
+    # Mode 9 — Nmap Command Reference
     # -------------------------------------------------------------
-    if ($Mode -eq 8) {
+    if ($Mode -eq 9) {
         Clear-Host
         Write-Host "============================================" -ForegroundColor DarkMagenta
         Write-Host "       NEO RADAR - Nmap Command Guide       " -ForegroundColor Cyan
@@ -242,6 +234,16 @@ function Start-NeoRadar {
         Write-Host "   -O analyzes subtle differences in TCP packet responses" -ForegroundColor Gray
         Write-Host "   (initial TTL, window size, DF flag, TCP options order)" -ForegroundColor Gray
         Write-Host "   to fingerprint the operating system with high accuracy." -ForegroundColor Gray
+        Write-Host ""
+
+        Write-Host "6) Custom Port Scan" -ForegroundColor Yellow
+        Write-Host "   Neo-Radar: Scan a port list you choose across all live hosts." -ForegroundColor Gray
+        Write-Host "   Nmap:      nmap -sT 192.168.0.0/24 -p 22,80,8080" -ForegroundColor Green
+        Write-Host "   Flags:" -ForegroundColor DarkCyan
+        Write-Host "     -sT -> TCP connect scan (no root needed)" -ForegroundColor DarkGray
+        Write-Host "     -p  -> Comma-separated custom port list" -ForegroundColor DarkGray
+        Write-Host "   How it works: Identical technique to Mode 3, but the port" -ForegroundColor Gray
+        Write-Host "   list comes from you instead of the built-in defaults." -ForegroundColor Gray
         Write-Host ""
 
         Write-Host "============================================" -ForegroundColor DarkMagenta
@@ -391,7 +393,32 @@ function Start-NeoRadar {
         return
     }
 
-    # --- Standard Subnet Prompt for Subnet Modes (1, 3, 4, 5) ---
+    # --- Mode 6: ask for the custom port list up front ---
+    if ($Mode -eq 6) {
+        do {
+            Write-Host "Enter 'B' for Main Menu, or 'E' to Exit." -ForegroundColor DarkGray
+            $portInput = Read-Host "Enter port(s) to scan across the network, separated by commas (e.g. 22, 80, 8080)"
+
+            if ($portInput -eq 'e' -or $portInput -eq 'E') { Write-Host "`nGoodbye." -ForegroundColor Cyan; exit }
+            if ($portInput -eq 'b' -or $portInput -eq 'B') { Start-NeoRadar; return }
+
+            $tokens = @($portInput -split '[,\s]+' | Where-Object { $_ -ne '' })
+            $invalid = @($tokens | Where-Object { ($_ -notmatch '^\d{1,5}$') -or ([int]$_ -lt 1) -or ([int]$_ -gt 65535) })
+
+            if ($tokens.Count -eq 0) {
+                Write-Host "  [!] Please enter at least one port number." -ForegroundColor Yellow
+            } elseif ($invalid.Count -gt 0) {
+                Write-Host "  [!] Invalid port(s): $($invalid -join ', '). Use numbers between 1 and 65535." -ForegroundColor Yellow
+            } else {
+                break
+            }
+        } while ($true)
+
+        $CustomPorts = @($tokens | ForEach-Object { [int]$_ } | Sort-Object -Unique)
+        Write-Host ""
+    }
+
+    # --- Standard Subnet Prompt for Subnet Modes (1, 3, 4, 5, 9) ---
     Write-Host "Enter 'B' for Main Menu, or 'E' to Exit." -ForegroundColor DarkGray
     $PrefixInput = Read-Host "Enter target network prefix (default: $DefaultPrefix)"
 
@@ -405,7 +432,7 @@ function Start-NeoRadar {
         if ($StartInput -eq 'e' -or $StartInput -eq 'E') { Write-Host "`nGoodbye." -ForegroundColor Cyan; exit }
         if ($StartInput -eq 'b' -or $StartInput -eq 'B') { Start-NeoRadar; return }
         if ([string]::IsNullOrWhiteSpace($StartInput)) { $Start = 1; break }
-        if ($StartInput -notmatch '^(?:[1-9]|[12]\d|25[0-5])$') {
+        if ($StartInput -notmatch '^\d{1,3}$' -or [int]$StartInput -lt 1 -or [int]$StartInput -gt 255) {
             Write-Host "  [!] Numbers only, between 1 and 255." -ForegroundColor Yellow
             $valid = $false
         } else {
@@ -418,7 +445,7 @@ function Start-NeoRadar {
         if ($EndInput -eq 'e' -or $EndInput -eq 'E') { Write-Host "`nGoodbye." -ForegroundColor Cyan; exit }
         if ($EndInput -eq 'b' -or $EndInput -eq 'B') { Start-NeoRadar; return }
         if ([string]::IsNullOrWhiteSpace($EndInput)) { $End = 254; break }
-        if ($EndInput -notmatch '^(?:[1-9]|[12]\d|25[0-5])$') {
+        if ($EndInput -notmatch '^\d{1,3}$' -or [int]$EndInput -lt 1 -or [int]$EndInput -gt 255) {
             Write-Host "  [!] Numbers only, between 1 and 255." -ForegroundColor Yellow
         } else {
             $End = [int]$EndInput; break
@@ -521,6 +548,105 @@ function Start-NeoRadar {
     }
 
     # -------------------------------------------------------------
+    # Mode 6 — Custom Port Scan (user-defined port list, BATCHED)
+    # -------------------------------------------------------------
+    if ($Mode -eq 6) {
+        Write-Host "`n[+] Scanning $($CustomPorts.Count) custom port(s): $($CustomPorts -join ', ')" -ForegroundColor Cyan
+
+        $Pool = [runspacefactory]::CreateRunspacePool(1, 64)
+        $Pool.Open()
+
+        $PortScript = {
+            param($TargetHost, $Ports)
+            $open = @()
+            foreach ($port in $Ports) {
+                $tcp = New-Object System.Net.Sockets.TcpClient
+                try {
+                    $async = $tcp.BeginConnect($TargetHost, $port, $null, $null)
+                    if ($async.AsyncWaitHandle.WaitOne(100, $false) -and $tcp.Connected) {
+                        $tcp.EndConnect($async)
+                        $open += $port
+                    }
+                } catch {} finally { $tcp.Close(); $tcp.Dispose() }
+            }
+            return [PSCustomObject]@{ Host = $TargetHost; OpenPorts = $open }
+        }
+
+        try {
+            $TcpRunspaces = @()
+            foreach ($target in $alive) {
+                $Powershell = [powershell]::Create().AddScript($PortScript).AddArgument($target).AddArgument($CustomPorts)
+                $Powershell.RunspacePool = $Pool
+                $TcpRunspaces += [PSCustomObject]@{
+                    Pipe  = $Powershell
+                    Async = $Powershell.BeginInvoke()
+                }
+            }
+
+            $results = foreach ($r in $TcpRunspaces) {
+                $res = $r.Pipe.EndInvoke($r.Async)
+                $r.Pipe.Dispose()
+                if ($res) { $res }
+            }
+        } finally {
+            $Pool.Close(); $Pool.Dispose()
+        }
+
+        $grouped = $results | Group-Object Host | Sort-Object { [int]($_.Name -split '\.')[3] }
+        $withOpen = @($grouped | Where-Object { $_.Group[0].OpenPorts -and $_.Group[0].OpenPorts.Count -gt 0 })
+        $noOpen   = @($grouped | Where-Object { -not $_.Group[0].OpenPorts -or $_.Group[0].OpenPorts.Count -eq 0 })
+        $noOpenList = ($noOpen.Name) -join ', '
+
+        Write-Host "`nCustom Port Scan Results:" -ForegroundColor Cyan
+
+        $scanLog = @(
+            "============================================",
+            " NEO RADAR - Custom Port Scan Log",
+            " Timestamp : $(Get-Date)",
+            " Target    : $Prefix.$Start-$End",
+            " Ports     : $($CustomPorts -join ', ')",
+            "--------------------------------------------"
+        )
+
+        Write-Host ""
+        Write-Host "=== FOUND - Hosts With Open Ports ($($withOpen.Count)) ===" -ForegroundColor Green
+        $scanLog += "FOUND - Hosts With Open Ports ($($withOpen.Count))"
+
+        if ($withOpen.Count -eq 0) {
+            Write-Host "  None" -ForegroundColor DarkGray
+            $scanLog += "  None"
+        }
+
+        foreach ($g in $withOpen) {
+            Write-Host "`nHost: $($g.Name)" -ForegroundColor Yellow
+            Write-Host "-------------------------" -ForegroundColor DarkMagenta
+            $scanLog += "`nHost: $($g.Name)"
+            foreach ($p in $g.Group[0].OpenPorts) {
+                Write-Host "  Port $p : OPEN" -ForegroundColor Green
+                $scanLog += "  Port $p : OPEN"
+            }
+        }
+
+        Write-Host ""
+        Write-Host "=== NOT FOUND - No Open Ports ($($noOpen.Count)) ===" -ForegroundColor DarkYellow
+        $scanLog += ""
+        $scanLog += "NOT FOUND - No Open Ports ($($noOpen.Count))"
+
+        if ($noOpen.Count -gt 0) {
+            Write-Host "  $noOpenList" -ForegroundColor DarkGray
+            $scanLog += "  $noOpenList"
+        } else {
+            Write-Host "  None" -ForegroundColor DarkGray
+            $scanLog += "  None"
+        }
+
+        $scanLog += "============================================"
+
+        Show-EndOptions -OutputData $scanLog
+        return
+    }
+
+    # -------------------------------------------------------------
     # Mode 3 — Ping + TCP port scan (BATCHED: all ports per runspace)
     # -------------------------------------------------------------
     if ($Mode -eq 3) {
@@ -566,9 +692,12 @@ function Start-NeoRadar {
             $Pool.Close(); $Pool.Dispose()
         }
 
-        Write-Host "`nTCP Port Results (Active Ports Only):" -ForegroundColor Cyan
-
         $grouped = $results | Group-Object Host | Sort-Object { [int]($_.Name -split '\.')[3] }
+        $withOpen = @($grouped | Where-Object { $_.Group[0].OpenPorts -and $_.Group[0].OpenPorts.Count -gt 0 })
+        $noOpen   = @($grouped | Where-Object { -not $_.Group[0].OpenPorts -or $_.Group[0].OpenPorts.Count -eq 0 })
+        $noOpenList = ($noOpen.Name) -join ', '
+
+        Write-Host "`nTCP Port Scan Results:" -ForegroundColor Cyan
 
         $scanLog = @(
             "============================================",
@@ -578,24 +707,38 @@ function Start-NeoRadar {
             "--------------------------------------------"
         )
 
-        foreach ($g in $grouped) {
-            $allPorts = $g.Group[0].OpenPorts
-            if ($allPorts -and $allPorts.Count -gt 0) {
-                Write-Host "`nHost: $($g.Name)" -ForegroundColor Yellow
-                Write-Host "-------------------------" -ForegroundColor DarkMagenta
-                $scanLog += "`nHost: $($g.Name)"
-                foreach ($p in $allPorts) {
-                    Write-Host "  Port $p : OPEN" -ForegroundColor Green
-                    $scanLog += "  Port $p : OPEN"
-                }
-            } else {
-                Write-Host "`nHost: $($g.Name)" -ForegroundColor Yellow
-                Write-Host "-------------------------" -ForegroundColor DarkMagenta
-                Write-Host "  No open ports found" -ForegroundColor DarkGray
-                $scanLog += "`nHost: $($g.Name)"
-                $scanLog += "  No open ports found"
+        Write-Host ""
+        Write-Host "=== FOUND - Hosts With Open Ports ($($withOpen.Count)) ===" -ForegroundColor Green
+        $scanLog += "FOUND - Hosts With Open Ports ($($withOpen.Count))"
+
+        if ($withOpen.Count -eq 0) {
+            Write-Host "  None" -ForegroundColor DarkGray
+            $scanLog += "  None"
+        }
+
+        foreach ($g in $withOpen) {
+            Write-Host "`nHost: $($g.Name)" -ForegroundColor Yellow
+            Write-Host "-------------------------" -ForegroundColor DarkMagenta
+            $scanLog += "`nHost: $($g.Name)"
+            foreach ($p in $g.Group[0].OpenPorts) {
+                Write-Host "  Port $p : OPEN" -ForegroundColor Green
+                $scanLog += "  Port $p : OPEN"
             }
         }
+
+        Write-Host ""
+        Write-Host "=== NOT FOUND - No Open Ports ($($noOpen.Count)) ===" -ForegroundColor DarkYellow
+        $scanLog += ""
+        $scanLog += "NOT FOUND - No Open Ports ($($noOpen.Count))"
+
+        if ($noOpen.Count -gt 0) {
+            Write-Host "  $noOpenList" -ForegroundColor DarkGray
+            $scanLog += "  $noOpenList"
+        } else {
+            Write-Host "  None" -ForegroundColor DarkGray
+            $scanLog += "  None"
+        }
+
         $scanLog += "============================================"
 
         Show-EndOptions -OutputData $scanLog
