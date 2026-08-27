@@ -1,11 +1,11 @@
-# ░▒▓█ NEO RADAR v1.15 █▓▒░
+# ░▒▓█ NEO RADAR v1.16 █▓▒░
 
 function Start-NeoRadar {
 
     Clear-Host
     Write-Host ""
     Write-Host "============================================" -ForegroundColor DarkMagenta
-    Write-Host "        ░▒▓█ NEO RADAR v1.15 █▓▒░          " -ForegroundColor Cyan
+    Write-Host "        ░▒▓█ NEO RADAR v1.16 █▓▒░          " -ForegroundColor Cyan
     Write-Host "============================================" -ForegroundColor DarkMagenta
     Write-Host "             Created By ItsNEOx             " -ForegroundColor Magenta
     Write-Host "      The super simple network radar      " -ForegroundColor DarkCyan
@@ -14,7 +14,7 @@ function Start-NeoRadar {
     Write-Host ""
 
     $DefaultPrefix = "192.168.0"
-    $CurrentVersion = "1.15"
+    $CurrentVersion = "1.16"
     $RepoRawUrl = "https://raw.githubusercontent.com/ItsNEOx/NEO-Radar-Powershell-7/main/neoradar.ps1"
     $RepoWebUrl = "https://github.com/ItsNEOx/NEO-Radar-Powershell-7"
 
@@ -123,7 +123,7 @@ function Start-NeoRadar {
 
         try {
             $remoteCode = Invoke-RestMethod -Uri $RepoRawUrl -TimeoutSec 5 -ErrorAction Stop
-            $match = [regex]::Match($remoteCode, 'v(\d+\.\d+)')
+            $match = [regex]::Match($remoteCode, 'v(\d+\.\d+(?:\.\d+)?)')
 
             if ($match.Success) {
                 $remoteVersion = $match.Groups[1].Value
@@ -426,7 +426,11 @@ function Start-NeoRadar {
     if ($PrefixInput -eq 'e' -or $PrefixInput -eq 'E') { Write-Host "`nGoodbye." -ForegroundColor Cyan; exit }
     if ($PrefixInput -eq 'b' -or $PrefixInput -eq 'B') { Start-NeoRadar; return }
 
-    $Prefix = if ([string]::IsNullOrWhiteSpace($PrefixInput)) { $DefaultPrefix } else { $PrefixInput }
+    $Prefix = if ([string]::IsNullOrWhiteSpace($PrefixInput)) { $DefaultPrefix } else { $PrefixInput.Trim().TrimEnd('.') }
+
+    # If user typed 4 octets (e.g. 192.168.0.0 or 172.92.50.1), drop the last to get a 3-octet prefix
+    $prefixOctets = $Prefix -split '\.'
+    if ($prefixOctets.Count -eq 4) { $Prefix = $prefixOctets[0..2] -join '.' }
 
     do {
         $StartInput = Read-Host "Enter starting host number (1-255, default: 1)"
